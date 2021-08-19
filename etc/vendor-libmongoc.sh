@@ -153,6 +153,7 @@ echo "RENAMING header files"
 echo "PATCHING libmongoc"
 git apply ${ETC_DIR}/lower-minheartbeatfrequencyms.diff
 git apply ${ETC_DIR}/inttypes-non-modular-header-workaround.diff
+git apply ${ETC_DIR}/expose-mock-service-id.diff
 
 # Clang modules are build by a conventional structure with an `include` folder for public
 # includes, and an umbrella header used as the primary entry point. As part of the vendoring
