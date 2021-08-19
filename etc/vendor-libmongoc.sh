@@ -153,6 +153,7 @@ echo "RENAMING header files"
 echo "PATCHING libmongoc"
 git apply ${ETC_DIR}/lower-minheartbeatfrequencyms.diff
 git apply ${ETC_DIR}/inttypes-non-modular-header-workaround.diff
+# TODO SWIFT-1319: Remove.
 git apply ${ETC_DIR}/expose-mock-service-id.diff
 
 # Clang modules are build by a conventional structure with an `include` folder for public
