@@ -61,7 +61,7 @@ public class TestCommandMonitor: CommandEventHandler {
 public enum UnifiedEventType: String, Decodable {
     case commandStartedEvent, commandSucceededEvent, commandFailedEvent,
         connectionCreatedEvent, connectionReadyEvent, connectionClosedEvent,
-        connectionCheckedInEvent, connectionCheckedOutEvent,
+        connectionCheckedInEvent, connectionCheckedOutEvent, connectionCheckOutFailedEvent,
         poolCreatedEvent, poolReadyEvent, poolClearedEvent, poolClosedEvent
 }
 
