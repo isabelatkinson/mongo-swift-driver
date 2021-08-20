@@ -187,8 +187,11 @@ extension MongoCollection {
      *
      * - Throws: `MongoError.LogicError` if the provided session is inactive.
      */
-    public func listIndexes(session: ClientSession? = nil) throws -> MongoCursor<IndexModel> {
-        let asyncCursor = try self.asyncColl.listIndexes(session: session?.asyncSession).wait()
+    public func listIndexes(
+        options: ListIndexesOptions? = nil,
+        session: ClientSession? = nil
+    ) throws -> MongoCursor<IndexModel> {
+        let asyncCursor = try self.asyncColl.listIndexes(options: options, session: session?.asyncSession).wait()
         return MongoCursor(wrapping: asyncCursor, client: self.client)
     }
 
@@ -202,7 +205,10 @@ extension MongoCollection {
      *
      * - Throws: `MongoError.LogicError` if the provided session is inactive.
      */
-    public func listIndexNames(session: ClientSession? = nil) throws -> [String] {
-        try self.asyncColl.listIndexNames(session: session?.asyncSession).wait()
+    public func listIndexNames(
+        options: ListIndexesOptions? = nil,
+        session: ClientSession? = nil
+    ) throws -> [String] {
+        try self.asyncColl.listIndexNames(options: options, session: session?.asyncSession).wait()
     }
 }

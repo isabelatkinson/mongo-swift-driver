@@ -9,21 +9,34 @@ internal enum ListIndexesResults {
     case names([String])
 }
 
+/// Options to use when executing a `listIndexes` command on a `MongoCollection`.
+public struct ListIndexesOptions: Codable {
+    /// The batchSize for the returned cursor.
+    public var batchSize: Int?
+
+    /// Convenience initializer allowing any/all parameters to be omitted or optional.
+    public init(batchSize: Int? = nil) {
+        self.batchSize = batchSize
+    }
+}
+
 /// An operation corresponding to a "listIndexes" command on a collection.
 internal struct ListIndexesOperation<T: Codable>: Operation {
     private let collection: MongoCollection<T>
     private let nameOnly: Bool
+    private let options: ListIndexesOptions?
 
-    internal init(collection: MongoCollection<T>, nameOnly: Bool) {
+    internal init(collection: MongoCollection<T>, nameOnly: Bool, options: ListIndexesOptions?) {
         self.collection = collection
         self.nameOnly = nameOnly
+        self.options = options
     }
 
     internal func execute(
         using connection: Connection,
         session: ClientSession?
     ) throws -> ListIndexesResults {
-        let opts = try encodeOptions(options: nil as BSONDocument?, session: session)
+        let opts = try encodeOptions(options: self.options, session: session)
 
         let indexes: OpaquePointer = self.collection.withMongocCollection(from: connection) { collPtr in
             withOptionalBSONPointer(to: opts) { optsPtr in
