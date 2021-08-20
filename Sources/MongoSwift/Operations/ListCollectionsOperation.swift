@@ -72,7 +72,7 @@ public struct CollectionSpecification: Codable {
 }
 
 /// Options to use when executing a `listCollections` command on a `MongoDatabase`.
-public struct ListCollectionsOptions: Encodable {
+public struct ListCollectionsOptions: Codable {
     /// The batchSize for the returned cursor.
     public var batchSize: Int?
 
@@ -116,6 +116,8 @@ internal struct ListCollectionsOperation: Operation {
                 opts["nameOnly"] = false
             }
         }
+
+        print("LIST COLLECTIONS OPTS: \(opts)")
 
         let collections: OpaquePointer = self.database.withMongocDatabase(from: connection) { dbPtr in
             opts.withBSONPointer { optsPtr in

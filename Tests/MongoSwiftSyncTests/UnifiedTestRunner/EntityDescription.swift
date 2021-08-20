@@ -32,7 +32,7 @@ enum EntityDescription: Decodable {
 
         /// Types of events that can be observed for this client. Unspecified event types MUST be ignored by this
         /// client's event listeners.
-        let observeEvents: [CommandEvent.EventType]?
+        let observeEvents: [UnifiedEventType]?
 
         /// Command names for which the test runner MUST ignore any observed command monitoring events. The command(s)
         /// will be ignored in addition to configureFailPoint and any commands containing sensitive information (per
@@ -166,10 +166,10 @@ struct UnifiedTestClient {
 class UnifiedTestCommandMonitor: CommandEventHandler {
     private var monitoring: Bool
     var events: [CommandEvent]
-    private let observeEvents: [CommandEvent.EventType]
+    private let observeEvents: [UnifiedEventType]
     private let ignoreEvents: [String]
 
-    public init(observeEvents: [CommandEvent.EventType]?, ignoreEvents: [String]?) {
+    public init(observeEvents: [UnifiedEventType]?, ignoreEvents: [String]?) {
         self.events = []
         self.monitoring = false
         self.observeEvents = observeEvents ?? []
@@ -180,7 +180,7 @@ class UnifiedTestCommandMonitor: CommandEventHandler {
         guard self.monitoring else {
             return
         }
-        guard self.observeEvents.contains(event.type) else {
+        guard self.observeEvents.contains(event.unifiedType) else {
             return
         }
         guard !self.ignoreEvents.contains(event.commandName) else {

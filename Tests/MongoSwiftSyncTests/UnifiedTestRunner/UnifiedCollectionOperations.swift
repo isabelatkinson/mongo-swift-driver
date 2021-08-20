@@ -75,6 +75,37 @@ struct UnifiedCreateIndex: UnifiedOperationProtocol {
     }
 }
 
+struct UnifiedListIndexes: UnifiedOperationProtocol {
+    /// Optional identifier for a session entity to use.
+    let session: String?
+
+    let options: ListIndexesOptions
+
+    private enum CodingKeys: String, CodingKey, CaseIterable {
+        case session
+    }
+
+    static var knownArguments: Set<String> {
+        Set(
+            CodingKeys.allCases.map { $0.rawValue } +
+                ListIndexesOptions().propertyNames
+        )
+    }
+
+    init(from decoder: Decoder) throws {
+        self.options = try decoder.singleValueContainer().decode(ListIndexesOptions.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.session = try container.decodeIfPresent(String.self, forKey: .session)
+    }
+
+    func execute(on object: UnifiedOperation.Object, context: Context) throws -> UnifiedOperationResult {
+        let collection = try context.entities.getEntity(from: object).asCollection()
+        let session = try context.entities.resolveSession(id: self.session)
+        let results = try collection.listIndexes(options: options, session: session)
+        return .rootDocumentArray(try results.map { try $0.get() }.map { try BSONEncoder().encode($0) })
+    }
+}
+
 struct UnifiedBulkWrite: UnifiedOperationProtocol {
     /// Writes to perform.
     let requests: [WriteModel<BSONDocument>]

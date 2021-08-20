@@ -58,6 +58,13 @@ public class TestCommandMonitor: CommandEventHandler {
     }
 }
 
+public enum UnifiedEventType: String, Decodable {
+    case commandStartedEvent, commandSucceededEvent, commandFailedEvent,
+        connectionCreatedEvent, connectionReadyEvent, connectionClosedEvent,
+        connectionCheckedInEvent, connectionCheckedOutEvent,
+        poolCreatedEvent, poolReadyEvent, poolClearedEvent, poolClosedEvent
+}
+
 extension CommandEvent {
     public enum EventType: String, Decodable {
         case commandStarted = "commandStartedEvent"
@@ -74,6 +81,17 @@ extension CommandEvent {
             return .commandFailed
         case .succeeded:
             return .commandSucceeded
+        }
+    }
+
+    public var unifiedType: UnifiedEventType {
+        switch self {
+        case .started:
+            return .commandStartedEvent
+        case .failed:
+            return .commandFailedEvent
+        case .succeeded:
+            return .commandSucceededEvent
         }
     }
 

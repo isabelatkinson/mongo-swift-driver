@@ -156,6 +156,8 @@ struct UnifiedOperation: Decodable {
             self.operation = try container.decode(AssertDifferentLsidOnLastTwoCommands.self, forKey: .arguments)
         case "assertSameLsidOnLastTwoCommands":
             self.operation = try container.decode(AssertSameLsidOnLastTwoCommands.self, forKey: .arguments)
+        case "assertNumberConnectionsCheckedOut":
+            self.operation = try container.decode(AssertNumberConnectionsCheckedOut.self, forKey: .arguments)
         case "assertSessionDirty":
             self.operation = try container.decode(AssertSessionDirty.self, forKey: .arguments)
         case "assertSessionNotDirty":
@@ -216,6 +218,10 @@ struct UnifiedOperation: Decodable {
             self.operation = IterateUntilDocumentOrError()
         case "listDatabases":
             self.operation = UnifiedListDatabases()
+        case "listCollections":
+            self.operation = try container.decode(UnifiedListCollections.self, forKey: .arguments)
+        case "listIndexes":
+            self.operation = try container.decode(UnifiedListIndexes.self, forKey: .arguments)
         case "replaceOne":
             self.operation = try container.decode(UnifiedReplaceOne.self, forKey: .arguments)
         case "runCommand":
