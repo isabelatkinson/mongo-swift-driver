@@ -420,7 +420,7 @@ extension MongoError.WriteError: HasErrorCodes {
 
 extension MongoError.BulkWriteError: HasErrorCodes {
     var errorCodes: [MongoError.ServerErrorCode] {
-        var codes = self.writeFailures?.map { $0.code } ?? []
+        var codes = self.writeFailures?.map(\.code) ?? []
         if let wcCode = self.writeConcernFailure?.code {
             codes.append(wcCode)
         }
@@ -428,7 +428,7 @@ extension MongoError.BulkWriteError: HasErrorCodes {
     }
 
     var errorCodeNames: [String] {
-        var codeNames = self.writeFailures?.map { $0.codeName } ?? []
+        var codeNames = self.writeFailures?.map(\.codeName) ?? []
         if let wcCodeName = self.writeConcernFailure?.codeName {
             codeNames.append(wcCodeName)
         }

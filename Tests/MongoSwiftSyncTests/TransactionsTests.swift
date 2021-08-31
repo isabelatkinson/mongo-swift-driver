@@ -89,6 +89,6 @@ final class TransactionsTests: MongoSwiftTestCase {
             // TODO: SWIFT-1175 unskip this test
             "mongos-unpin": ["unpin on successful abort"]
         ]
-        try runner.runFiles(files.map { $0.1 }, skipTests: skipList)
+        try runner.runFiles(files.map(\.1), skipTests: skipList)
     }
 }

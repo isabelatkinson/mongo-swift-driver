@@ -80,7 +80,7 @@ public enum MongoError {
 
         public var errorDescription: String? {
             var descriptions: [String] = []
-            if let messages = self.writeFailures?.map({ $0.message }) {
+            if let messages = self.writeFailures?.map(\.message) {
                 descriptions.append("Write errors: \(messages)")
             }
 
@@ -292,7 +292,7 @@ private func parseMongocError(_ error: bson_error_t, reply: BSONDocument?) -> Mo
     let code = mongoc_error_code_t(rawValue: error.code)
     let message = toErrorString(error)
 
-    let errorLabels = reply?["errorLabels"]?.arrayValue?.compactMap { $0.stringValue }
+    let errorLabels = reply?["errorLabels"]?.arrayValue?.compactMap(\.stringValue)
     let codeName = reply?["codeName"]?.stringValue ?? ""
 
     switch (domain, code) {
@@ -357,7 +357,7 @@ internal func extractMongoError(error bsonError: bson_error_t, reply: BSONDocume
 
     do {
         var writeError: MongoError.WriteFailure?
-        if let writeErrors = serverReply["writeErrors"]?.arrayValue?.compactMap({ $0.documentValue }),
+        if let writeErrors = serverReply["writeErrors"]?.arrayValue?.compactMap(\.documentValue),
            !writeErrors.isEmpty
         {
             writeError = try BSONDecoder().decode(MongoError.WriteFailure.self, from: writeErrors[0])
@@ -371,7 +371,7 @@ internal func extractMongoError(error bsonError: bson_error_t, reply: BSONDocume
         return MongoError.WriteError(
             writeFailure: writeError,
             writeConcernFailure: wcError,
-            errorLabels: serverReply["errorLabels"]?.arrayValue?.compactMap { $0.stringValue }
+            errorLabels: serverReply["errorLabels"]?.arrayValue?.compactMap(\.stringValue)
         )
     } catch {
         return fallback
@@ -404,7 +404,7 @@ internal func extractBulkWriteError<T: Codable>(
 
     do {
         var bulkWriteErrors: [MongoError.BulkWriteFailure] = []
-        if let writeErrors = reply["writeErrors"]?.arrayValue?.compactMap({ $0.documentValue }) {
+        if let writeErrors = reply["writeErrors"]?.arrayValue?.compactMap(\.documentValue) {
             bulkWriteErrors = try writeErrors.map {
                 try BSONDecoder().decode(MongoError.BulkWriteFailure.self, from: $0)
             }
@@ -423,7 +423,7 @@ internal func extractBulkWriteError<T: Codable>(
                 let maxIndex = result.insertedIDs.keys.sorted()[result.insertedCount - 1]
                 filteredIDs = result.insertedIDs.filter { $0.key <= maxIndex }
             } else { // if unordered, just remove those that have write errors associated with them
-                let errs = Set(bulkWriteErrors.map { $0.index })
+                let errs = Set(bulkWriteErrors.map(\.index))
                 filteredIDs = result.insertedIDs.filter { !errs.contains($0.key) }
             }
         }
@@ -461,7 +461,7 @@ internal func extractBulkWriteError<T: Codable>(
             writeConcernFailure: try extractWriteConcernError(from: reply),
             otherError: other,
             result: errResult,
-            errorLabels: reply["errorLabels"]?.arrayValue?.compactMap { $0.stringValue }
+            errorLabels: reply["errorLabels"]?.arrayValue?.compactMap(\.stringValue)
         )
     } catch {
         return fallback
@@ -470,7 +470,7 @@ internal func extractBulkWriteError<T: Codable>(
 
 /// Extracts a `WriteConcernError` from a server reply.
 private func extractWriteConcernError(from reply: BSONDocument) throws -> MongoError.WriteConcernFailure? {
-    if let writeConcernErrors = reply["writeConcernErrors"]?.arrayValue?.compactMap({ $0.documentValue }),
+    if let writeConcernErrors = reply["writeConcernErrors"]?.arrayValue?.compactMap(\.documentValue),
        !writeConcernErrors.isEmpty
     {
         return try BSONDecoder().decode(MongoError.WriteConcernFailure.self, from: writeConcernErrors[0])

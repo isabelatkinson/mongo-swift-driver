@@ -106,7 +106,7 @@ final class CrudTests: MongoSwiftTestCase {
             "unacknowledged-bulkWrite-update-hint-clientError": ["*"],
             "unacknowledged-bulkWrite-replace-hint-clientError": ["*"]
         ]
-        try runner.runFiles(files.map { $0.1 }, skipTests: skipList)
+        try runner.runFiles(files.map(\.1), skipTests: skipList)
     }
 }
 
@@ -169,7 +169,7 @@ private class CrudTest {
     let result: BSON?
     let collection: BSONDocument?
 
-    var arrayFilters: [BSONDocument]? { self.args["arrayFilters"]?.arrayValue?.compactMap { $0.documentValue } }
+    var arrayFilters: [BSONDocument]? { self.args["arrayFilters"]?.arrayValue?.compactMap(\.documentValue) }
     var batchSize: Int? { self.args["batchSize"]?.toInt() }
     var collation: BSONDocument? { self.args["collation"]?.documentValue }
     var sort: BSONDocument? { self.args["sort"]?.documentValue }
@@ -249,7 +249,7 @@ private class CrudTest {
     ///
     /// This compares documents without considering key ordering.
     func verifyCursorContents(_ cursor: MongoCursor<BSONDocument>, result: BSON?) throws {
-        guard let expectedResults = result?.arrayValue?.compactMap({ $0.documentValue }) else {
+        guard let expectedResults = result?.arrayValue?.compactMap(\.documentValue) else {
             return
         }
         let results = try cursor.all()
@@ -263,7 +263,7 @@ private class CrudTest {
 /// A class for executing `aggregate` tests
 private class AggregateTest: CrudTest {
     override func execute(usingCollection coll: MongoCollection<BSONDocument>) throws {
-        let pipeline = self.args["pipeline"]!.arrayValue!.compactMap { $0.documentValue }
+        let pipeline = self.args["pipeline"]!.arrayValue!.compactMap(\.documentValue)
         let options = AggregateOptions(batchSize: self.batchSize, collation: self.collation)
         let cursor = try coll.aggregate(pipeline, options: options)
         if self.collection != nil {
@@ -281,7 +281,7 @@ private class AggregateTest: CrudTest {
 
 private class BulkWriteTest: CrudTest {
     override func execute(usingCollection coll: MongoCollection<BSONDocument>) throws {
-        let requestDocuments: [BSONDocument] = self.args["requests"]!.arrayValue!.compactMap { $0.documentValue }
+        let requestDocuments: [BSONDocument] = self.args["requests"]!.arrayValue!.compactMap(\.documentValue)
         let requests = try requestDocuments.map { try BSONDecoder().decode(WriteModel<BSONDocument>.self, from: $0) }
         let options = try BSONDecoder().decode(BulkWriteOptions.self, from: self.args["options"]?.documentValue ?? [:])
         let expectError = self.error ?? false
@@ -465,7 +465,7 @@ private class FindOneAndUpdateTest: CrudTest {
 /// A class for executing `insertMany` tests
 private class InsertManyTest: CrudTest {
     override func execute(usingCollection coll: MongoCollection<BSONDocument>) throws {
-        let documents = self.args["documents"]!.arrayValue!.compactMap { $0.documentValue }
+        let documents = self.args["documents"]!.arrayValue!.compactMap(\.documentValue)
         let options = InsertManyTest.parseInsertManyOptions(self.args["options"]?.documentValue)
         let expectError = self.error ?? false
 

@@ -231,7 +231,7 @@ struct AssertSameLsidOnLastTwoCommands: UnifiedOperationProtocol {
 }
 
 func makeLsidAssertion(client: UnifiedTestClient, same: Bool, context: Context) {
-    let lastTwoEvents = Array(client.commandMonitor.events.compactMap { $0.commandStartedValue }.suffix(2))
+    let lastTwoEvents = Array(client.commandMonitor.events.compactMap(\.commandStartedValue).suffix(2))
     expect(lastTwoEvents.count).to(
         equal(2),
         description: "Expected client to have at least two command started events. Path: \(context.path)"

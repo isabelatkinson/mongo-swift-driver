@@ -64,7 +64,7 @@ final class UnifiedRunnerTests: MongoSwiftTestCase {
             subdirectory: "valid-pass",
             excludeFiles: skipValidPassFiles,
             asType: UnifiedTestFile.self
-        ).map { $0.1 }
+        ).map(\.1)
 
         let runner = try UnifiedTestRunner()
         try runner.runFiles(validPassTests)

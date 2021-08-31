@@ -89,13 +89,13 @@ enum TestWriteModel: Decodable {
     var knownArguments: Set<String> {
         switch self {
         case .insertOne:
-            return Set(InsertOneKeys.allCases.map { $0.stringValue })
+            return Set(InsertOneKeys.allCases.map(\.stringValue))
         case .deleteOne, .deleteMany:
-            return Set(DeleteKeys.allCases.map { $0.stringValue } + DeleteModelOptions().propertyNames)
+            return Set(DeleteKeys.allCases.map(\.stringValue) + DeleteModelOptions().propertyNames)
         case .updateOne, .updateMany:
-            return Set(UpdateKeys.allCases.map { $0.stringValue } + UpdateModelOptions().propertyNames)
+            return Set(UpdateKeys.allCases.map(\.stringValue) + UpdateModelOptions().propertyNames)
         case .replaceOne:
-            return Set(ReplaceOneKeys.allCases.map { $0.stringValue } + ReplaceOneModelOptions().propertyNames)
+            return Set(ReplaceOneKeys.allCases.map(\.stringValue) + ReplaceOneModelOptions().propertyNames)
         }
     }
 

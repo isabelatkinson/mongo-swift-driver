@@ -20,8 +20,8 @@ struct UnifiedAggregate: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
-                AggregateOptions.CodingKeys.allCases.map { $0.rawValue }
+            CodingKeys.allCases.map(\.rawValue) +
+                AggregateOptions.CodingKeys.allCases.map(\.rawValue)
         )
     }
 
@@ -91,7 +91,7 @@ struct UnifiedBulkWrite: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 BulkWriteOptions().propertyNames
         )
     }
@@ -131,8 +131,8 @@ struct UnifiedFind: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
-                FindOptions.CodingKeys.allCases.map { $0.rawValue }
+            CodingKeys.allCases.map(\.rawValue) +
+                FindOptions.CodingKeys.allCases.map(\.rawValue)
         )
     }
 
@@ -168,8 +168,8 @@ struct UnifiedCreateFindCursor: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
-                FindOptions.CodingKeys.allCases.map { $0.rawValue }
+            CodingKeys.allCases.map(\.rawValue) +
+                FindOptions.CodingKeys.allCases.map(\.rawValue)
         )
     }
 
@@ -206,7 +206,7 @@ struct UnifiedFindOneAndReplace: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 FindOneAndReplaceOptions().propertyNames
         )
     }
@@ -253,7 +253,7 @@ struct UnifiedFindOneAndUpdate: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 FindOneAndUpdateOptions().propertyNames
         )
     }
@@ -290,7 +290,7 @@ struct UnifiedFindOneAndDelete: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 FindOneAndDeleteOptions().propertyNames
         )
     }
@@ -330,7 +330,7 @@ struct UnifiedDeleteOne: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 DeleteOptions().propertyNames
         )
     }
@@ -361,7 +361,7 @@ struct UnifiedDeleteMany: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 DeleteOptions().propertyNames
         )
     }
@@ -402,7 +402,7 @@ struct UnifiedInsertOne: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 InsertOneOptions().propertyNames
         )
     }
@@ -440,7 +440,7 @@ struct UnifiedInsertMany: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 InsertManyOptions().propertyNames
         )
     }
@@ -482,7 +482,7 @@ struct UnifiedReplaceOne: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 ReplaceOptions().propertyNames
         )
     }
@@ -530,7 +530,7 @@ struct UnifiedEstimatedDocumentCount: UnifiedOperationProtocol {
     let options: EstimatedDocumentCountOptions?
 
     static var knownArguments: Set<String> {
-        Set(EstimatedDocumentCountOptions.CodingKeys.allCases.map { $0.stringValue })
+        Set(EstimatedDocumentCountOptions.CodingKeys.allCases.map(\.stringValue))
     }
 
     init(from decoder: Decoder) throws {
@@ -579,7 +579,7 @@ struct UnifiedUpdateOne: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 UpdateOptions().propertyNames
         )
     }
@@ -624,7 +624,7 @@ struct UnifiedUpdateMany: UnifiedOperationProtocol {
 
     static var knownArguments: Set<String> {
         Set(
-            CodingKeys.allCases.map { $0.rawValue } +
+            CodingKeys.allCases.map(\.rawValue) +
                 UpdateOptions().propertyNames
         )
     }

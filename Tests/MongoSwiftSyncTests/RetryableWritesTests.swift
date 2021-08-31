@@ -148,7 +148,7 @@ final class RetryableWritesTests: MongoSwiftTestCase {
             specName: "retryable-writes",
             subdirectory: "unified",
             asType: UnifiedTestFile.self
-        ).map { $0.1 }
+        ).map(\.1)
 
         let runner = try UnifiedTestRunner()
         try runner.runFiles(tests)

@@ -35,7 +35,7 @@ class ReadWriteConcernSpecTests: MongoSwiftTestCase {
             asType: BSONDocument.self
         )
         for (_, asDocument) in testFiles {
-            let tests: [BSONDocument] = asDocument["tests"]!.arrayValue!.compactMap { $0.documentValue }
+            let tests: [BSONDocument] = asDocument["tests"]!.arrayValue!.compactMap(\.documentValue)
             for test in tests {
                 let uri = test["uri"]!.stringValue!
                 let valid = test["valid"]!.boolValue!
@@ -75,7 +75,7 @@ class ReadWriteConcernSpecTests: MongoSwiftTestCase {
         )
 
         for (_, asDocument) in testFiles {
-            let tests = asDocument["tests"]!.arrayValue!.compactMap { $0.documentValue }
+            let tests = asDocument["tests"]!.arrayValue!.compactMap(\.documentValue)
             for test in tests {
                 let valid: Bool = test["valid"]!.boolValue!
                 if let rcToUse = test["readConcern"]?.documentValue {

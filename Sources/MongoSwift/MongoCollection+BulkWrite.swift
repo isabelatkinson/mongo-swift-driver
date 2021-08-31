@@ -469,7 +469,7 @@ public struct BulkWriteResult: Codable {
             case .upsertedCount:
                 upsertedCount = v.toInt()
             case .upserted:
-                if let upserted = reply[MongocKeys.upserted.rawValue]?.arrayValue?.compactMap({ $0.documentValue }) {
+                if let upserted = reply[MongocKeys.upserted.rawValue]?.arrayValue?.compactMap(\.documentValue) {
                     for upsert in upserted {
                         guard let index = upsert["index"]?.toInt() else {
                             throw MongoError.InternalError(message: "Could not cast upserted index to `Int`")

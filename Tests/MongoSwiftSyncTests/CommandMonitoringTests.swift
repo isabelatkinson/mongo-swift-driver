@@ -73,7 +73,7 @@ final class CommandMonitoringTests: MongoSwiftTestCase {
             specName: "command-monitoring",
             subdirectory: "unified",
             asType: UnifiedTestFile.self
-        ).map { $0.1 }
+        ).map(\.1)
         let runner = try UnifiedTestRunner()
         try runner.runFiles(files)
     }
@@ -149,7 +149,7 @@ private struct CMTest: Decodable {
             } catch {}
 
         case "insertMany":
-            let documents = (self.op.args["documents"]?.arrayValue?.compactMap { $0.documentValue })!
+            let documents = (self.op.args["documents"]?.arrayValue?.compactMap(\.documentValue))!
             let options = InsertManyOptions(ordered: self.op.args["options"]?.documentValue?["ordered"]?.boolValue)
             _ = try? collection.insertMany(documents, options: options)
 
@@ -293,7 +293,7 @@ private struct CommandSucceededExpectation: ExpectationType, Decodable {
     let commandName: String
 
     var reply: BSONDocument { normalizeExpectedReply(self.originalReply) }
-    var writeErrors: [BSONDocument]? { self.originalReply["writeErrors"]?.arrayValue?.compactMap { $0.documentValue } }
+    var writeErrors: [BSONDocument]? { self.originalReply["writeErrors"]?.arrayValue?.compactMap(\.documentValue) }
     var cursor: BSONDocument? { self.originalReply["cursor"]?.documentValue }
 
     enum CodingKeys: String, CodingKey {
@@ -312,7 +312,7 @@ private struct CommandSucceededExpectation: ExpectationType, Decodable {
         expect(event.commandName).to(equal(self.commandName))
 
         // compare writeErrors, if any
-        let receivedWriteErrs = event.reply["writeErrors"]?.arrayValue?.compactMap { $0.documentValue }
+        let receivedWriteErrs = event.reply["writeErrors"]?.arrayValue?.compactMap(\.documentValue)
         if let expectedErrs = self.writeErrors {
             expect(receivedWriteErrs).toNot(beNil())
             self.checkWriteErrors(expected: expectedErrs, actual: receivedWriteErrs!)
