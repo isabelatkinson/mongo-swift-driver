@@ -1021,10 +1021,6 @@ axes:
   - id: swift-version
     display_name: "Swift"
     values:
-      - id: "5.1"
-        display_name: "Swift 5.1"
-        variables:
-           SWIFT_VERSION: "5.1.5"
       - id: "5.2"
         display_name: "Swift 5.2"
         variables:
@@ -1125,43 +1121,10 @@ task_groups:
       - ".serverless"
 
 buildvariants:
-# there are no 5.1 toolchains for Ubuntu 20.04. unfortunately as of now we cannot remove
-# entire buildvariants via rule from the main matrix so we need to split this up. see EVG-13092
-- matrix_name: "tests-5.1"
-  matrix_spec:
-    os-fully-featured:
-      - "ubuntu-18.04"
-      - "macos-10.15"
-    swift-version: "5.1"
-    ssl-auth: "*"
-  display_name: "${swift-version} ${os-fully-featured} ${ssl-auth}"
-  tasks:
-     - ".latest"
-     - ".5.0"
-     - ".4.4"
-     - ".4.2"
-     - ".4.0"
-     - ".3.6"
-  rules:
-  # MongoDB 3.6 does not have Ubuntu 18.04-specific Linux releases, so we just use
-  # generic Linux there. This do not link to OpenSSL, so we have to skip SSL tests.
-  - if:
-      os-fully-featured:
-        - "ubuntu-18.04"
-      swift-version: "*"
-      ssl-auth: "ssl-auth"
-    then:
-      remove_tasks:
-      - ".3.6"
-
 - matrix_name: "tests-all"
   matrix_spec:
     os-fully-featured: "*"
-    swift-version:
-      - "5.2"
-      - "5.3"
-      - "5.4"
-      - "5.5-dev"
+    swift-version: "*"
     ssl-auth: "*"
   display_name: "${swift-version} ${os-fully-featured} ${ssl-auth}"
   tasks:
@@ -1196,26 +1159,10 @@ buildvariants:
         - ".4.0"
         - ".4.2"
 
-# there are no 5.1 toolchains for Ubuntu 20.04. unfortunately as of now we cannot remove
-# entire buildvariants via rule from the main matrix so we need to split this up. see EVG-13092
-- matrix_name: "atlas-connect-5.1"
-  matrix_spec:
-    os-fully-featured:
-      - "macos-10.15"
-      - "ubuntu-18.04"
-    swift-version: "5.1"
-  display_name: "Atlas Connectivity ${swift-version} ${os-fully-featured}"
-  tasks:
-    - ".atlas-connect"
-
 - matrix_name: "atlas-connect"
   matrix_spec:
     os-fully-featured: "*"
-    swift-version:
-      - "5.2"
-      - "5.3"
-      - "5.4"
-      - "5.5-dev"
+    swift-version: "*"
   display_name: "Atlas Connectivity ${swift-version} ${os-fully-featured}"
   tasks:
     - ".atlas-connect"
