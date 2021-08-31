@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.2
 import PackageDescription
 let package = Package(
     name: "mongo-swift-driver",
@@ -15,16 +15,53 @@ let package = Package(
         .package(url: "https://github.com/mongodb/swift-bson", .upToNextMajor(from: "3.0.0"))
     ],
     targets: [
-        .target(name: "MongoSwift", dependencies: ["CLibMongoC", "NIO", "NIOConcurrencyHelpers", "SwiftBSON",]),
-        .target(name: "MongoSwiftSync", dependencies: ["MongoSwift", "NIO"]),
+        .target(
+            name: "MongoSwift",
+            dependencies: [
+                "CLibMongoC",
+                .product(name: "NIO", package: "swift-nio"),
+                .product(name: "NIOConcurrencyHelpers", package: "swift-nio"),
+                .product(name: "SwiftBSON", package: "swift-bson")
+            ]
+        ),
+        .target(
+            name: "MongoSwiftSync",
+            dependencies: [
+                "MongoSwift",
+                .product(name: "NIO", package: "swift-nio")
+            ]
+        ),
         .target(name: "AtlasConnectivity", dependencies: ["MongoSwiftSync"]),
         .target(name: "TestsCommon", dependencies: ["MongoSwift", "Nimble"]),
-        .testTarget(name: "BSONTests", dependencies: ["MongoSwift", "TestsCommon", "Nimble", "CLibMongoC"]),
-        .testTarget(name: "MongoSwiftTests", dependencies: ["MongoSwift", "TestsCommon", "Nimble", "NIO"]),
-        .testTarget(name: "MongoSwiftSyncTests", dependencies: ["MongoSwiftSync", "TestsCommon", "Nimble", "MongoSwift"]),
+        .testTarget(
+            name: "BSONTests",
+            dependencies: [
+                "MongoSwift",
+                "TestsCommon",
+                "CLibMongoC",
+                .product(name: "Nimble", package: "Nimble")
+            ]
+        ),
+        .testTarget(
+            name: "MongoSwiftTests",
+            dependencies: [
+                "MongoSwift",
+                "TestsCommon",
+                .product(name: "Nimble", package: "Nimble"),
+                .product(name: "NIO", package: "swift-nio")
+            ]
+        ),
+        .testTarget(
+            name: "MongoSwiftSyncTests",
+            dependencies: [
+                "MongoSwiftSync",
+                "TestsCommon",
+                "MongoSwift",
+                .product(name: "Nimble", package: "Nimble")
+            ]
+        ),
         .target(
             name: "CLibMongoC",
-            dependencies: [],
             linkerSettings: [
                 .linkedLibrary("resolv"),
                 .linkedLibrary("ssl", .when(platforms: [.linux])),
