@@ -14,9 +14,9 @@
         "package": "swift-bson",
         "repositoryURL": "https://github.com/mongodb/swift-bson",
         "state": {
-          "branch": null,
-          "revision": "8a9d60c4e684579a390621674850e8a6fa04c3ed",
-          "version": "3.0.0"
+          "branch": "SWIFT-1260/null-bytes",
+          "revision": "b6241cc5fc2e6b4af1b36d9f7b0db4e7b84299e8",
+          "version": null
         }
       },
       {
